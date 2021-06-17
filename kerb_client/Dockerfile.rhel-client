@@ -1,0 +1,10 @@
+FROM centos:8
+
+# Install FreeIPA client
+RUN yum install nfs-utils ipa-client -y 
+
+COPY container_setup.sh .
+
+RUN chmod +x container_setup.sh
+
+ENTRYPOINT [ "bash", "container_setup.sh" ]

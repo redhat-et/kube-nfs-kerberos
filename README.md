@@ -19,3 +19,13 @@ RHEL8 - Configuring and managing Identity Management
 
 Spark
 1. [Spark 3.1.1 - Documentation - Security - Kerberos](https://spark.apache.org/docs/latest/security.html#kerberos)
+
+## Adcli CoreOs setup
+
+```bash
+PASSWORD=samplepassword
+domain=corp.octo-emerging.redhataicoe.com
+realm=CORP.OCTO-EMERGING.REDHATAICOE.COM
+
+echo "$PASSWORD" > adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin --stdin-password
+```

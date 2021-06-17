@@ -1,0 +1,9 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get install -y freeipa-client
+
+COPY container_setup.sh /root/container_setup.sh
+RUN chmod +x /root/container_setup.sh
+
+ENTRYPOINT "/root/container_setup.sh"
