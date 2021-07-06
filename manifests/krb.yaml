@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kerbclient
+  labels:
+    app: kerbclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kerbclient
+  template:
+    metadata:
+      labels:
+        app: kerbclient
+    spec:
+      serviceAccountName: kerb-nfs-sample
+      volumes:
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: nfsclaim
+      - name: keytab
+        secret:
+          secretName: krb-keytab
+      - name: cache-volume
+        emptyDir: {}
+      securityContext:
+        supplementalGroups: [5555]
+      containers:
+      - image: quay.io/krishchow/krb5_client
+        imagePullPolicy: Always
+        name: krb5client        
+        env:
+        - name: KRB5CCNAME
+          value: "DIR:/cache"
+        - name: USERNAME
+          value: "ocpnfs"
+        - name: REALM
+          value: CORP.OCTO-EMERGING.REDHATAICOE.COM
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: /export
+        - name: keytab
+          mountPath: "/keytab"
+        - name: cache-volume
+          mountPath: "/cache"
+      restartPolicy: Always

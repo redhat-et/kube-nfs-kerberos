@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kerbnfs
+  labels:
+    app: kerbnfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kerbnfs
+  template:
+    metadata:
+      labels:
+        app: kerbnfs
+    spec:
+      serviceAccountName: kerb-nfs-sample
+      volumes:
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: nfsclaim
+      containers:
+      - image: fedora
+        command:
+          - sleep
+          - "3600"
+        imagePullPolicy: IfNotPresent
+        name: fedora
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: /export
+      restartPolicy: Always

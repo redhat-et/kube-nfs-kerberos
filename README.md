@@ -23,9 +23,19 @@ Spark
 ## Adcli CoreOs setup
 
 ```bash
-PASSWORD=samplepassword
 domain=corp.octo-emerging.redhataicoe.com
 realm=CORP.OCTO-EMERGING.REDHATAICOE.COM
 
-echo "$PASSWORD" > adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin --stdin-password
+sudo adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin
+
+update krb5.conf
+
+systemctl enable nfs-client.target
+
+systemctl restart nfs-client.target
+
+mkdir -p /mnt/test
+
+mount -t nfs4 nfs.octo-emerging.redhataicoe.com:/export /mnt/test -o sec=krb5,rw
 ```
+
