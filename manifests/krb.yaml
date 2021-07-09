@@ -22,17 +22,23 @@ spec:
       - name: keytab
         secret:
           secretName: krb-keytab
-      - name: cache-volume
-        emptyDir: {}
+      # - name: cache-volume
+      #   emptyDir: {}
+        # hostPath:
+          # path: /run/user/1000620000
+          # type: DirectoryOrCreate
       securityContext:
         supplementalGroups: [5555]
       containers:
       - image: quay.io/krishchow/krb5_client
         imagePullPolicy: Always
-        name: krb5client        
+        name: krb5client
+        # securityContext:
+          # privileged: true
+          # runAsUser: 1000620000
         env:
         - name: KRB5CCNAME
-          value: "DIR:/cache"
+          value: "KEYRING:persistent:1000620000"
         - name: USERNAME
           value: "ocpnfs"
         - name: REALM
@@ -42,6 +48,6 @@ spec:
           mountPath: /export
         - name: keytab
           mountPath: "/keytab"
-        - name: cache-volume
-          mountPath: "/cache"
+        # - name: cache-volume
+        #   mountPath: "/cache"
       restartPolicy: Always

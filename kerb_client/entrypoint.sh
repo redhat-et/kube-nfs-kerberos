@@ -16,6 +16,6 @@ kinit -kt /keytab/keytab ${USERNAME}@${REALM}
 # echo "Secrets removed from tmpfs"
 while :;
 do
-  kinit -R
+  kinit -R -kt /keytab/keytab
   sleep ${KERBEROS_RENEWAL_TIME}
 done

@@ -28,7 +28,7 @@ realm=CORP.OCTO-EMERGING.REDHATAICOE.COM
 
 sudo adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin
 
-update krb5.conf
+update krb5.conf, nfs.conf, idmapd.conf
 
 systemctl enable nfs-client.target
 
