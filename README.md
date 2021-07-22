@@ -26,16 +26,24 @@ Spark
 domain=corp.octo-emerging.redhataicoe.com
 realm=CORP.OCTO-EMERGING.REDHATAICOE.COM
 
-sudo adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin
+oc apply -f machineconfig/machineconfig.yaml
+# updates krb5.conf, nfs.conf, idmapd.conf
 
-update krb5.conf, nfs.conf, idmapd.conf
+sudo adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin
 
 systemctl enable nfs-client.target
 
 systemctl restart nfs-client.target
 
+systemctl restart nfs-idmapd.service
+
 mkdir -p /mnt/test
 
+# validate that NFS mount works
 mount -t nfs4 nfs.octo-emerging.redhataicoe.com:/export /mnt/test -o sec=krb5,rw
 ```
 
+## Questions
+
+- Can we use adcli (or something similar) within the context of a MachineConfig?
+  - [https://github.com/coreos/bugs/issues/968](https://github.com/coreos/bugs/issues/968)
