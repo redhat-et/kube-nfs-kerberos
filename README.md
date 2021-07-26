@@ -43,6 +43,27 @@ mkdir -p /mnt/test
 mount -t nfs4 nfs.octo-emerging.redhataicoe.com:/export /mnt/test -o sec=krb5,rw
 ```
 
+## Kerberized NFS setup (Active Directory)
+
+```bash
+$ yum install adcli nfs-utils
+$ adcli join --verbose --domain $domain --domain-realm $realm --domain-controller $domain --login-type user --login-user Admin --service-name="host" --service-name="nfs"
+$ kinit Admin
+# setup /etc/krb5.conf
+# setup /etc/idmapd.conf
+$ echo "/export  *(rw,root_squash,sec=krb5)" > /etc/exports # export shares in /etc/exports
+$ firewall-cmd --zone=public --add-service=nfs --permanent
+$ firewall-cmd --permanent --add-service=mountd --permanent
+$ firewall-cmd --permanent --add-service=rpc-bind --permanent
+$ systemctl restart nfs-idmapd.service
+$ systemctl restart nfs-server
+$ exportfs -var
+# ensure user, group, selinux permissions correct for share
+
+
+
+```
+
 ## Questions
 
 - Can we use adcli (or something similar) within the context of a MachineConfig?
