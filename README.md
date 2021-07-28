@@ -59,9 +59,6 @@ $ systemctl restart nfs-idmapd.service
 $ systemctl restart nfs-server
 $ exportfs -var
 # ensure user, group, selinux permissions correct for share
-
-
-
 ```
 
 ## Questions

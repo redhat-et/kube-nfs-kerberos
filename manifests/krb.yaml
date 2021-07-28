@@ -27,7 +27,7 @@ spec:
       containers:
       - image: quay.io/krishchow/krb5_client
         imagePullPolicy: Always
-        name: krb5client
+        name: sidecar
         env:
         - name: KRB5CCNAME
           value: "KEYRING:persistent:1000620000"
