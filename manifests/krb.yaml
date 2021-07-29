@@ -29,8 +29,6 @@ spec:
         imagePullPolicy: Always
         name: sidecar
         env:
-        - name: KRB5CCNAME
-          value: "KEYRING:persistent:1000620000"
         - name: USERNAME
           value: "ocpnfs"
         - name: REALM
@@ -38,6 +36,10 @@ spec:
         volumeMounts:
         - name: keytab
           mountPath: "/keytab"
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/bin/kdestroy"]
       - image: quay.io/krishchow/krb5_client
         imagePullPolicy: Always
         name: workload
